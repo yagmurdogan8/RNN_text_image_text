@@ -2,6 +2,7 @@ import required
 import tensorflow as tf
 from keras.layers import Dense, RNN, LSTM, Flatten, TimeDistributed, LSTMCell
 from keras.layers import RepeatVector, Conv2D, SimpleRNN, GRU, Reshape, ConvLSTM2D, Conv2DTranspose
+from sklearn.model_selection import train_test_split
 
 
 def build_text2text_model():
@@ -34,3 +35,19 @@ def build_text2text_model():
     text2text.summary()
 
     return text2text
+
+
+# Split dataset
+X_train_onehot, X_test_onehot, y_train_onehot, y_test_onehot = train_test_split(required.X_text_onehot,
+                                                                                required.y_text_onehot,
+                                                                                test_size=0.1, random_state=42)
+
+text2text = build_text2text_model()
+
+# Train the model
+text2text.fit(X_train_onehot, y_train_onehot, epochs=50, batch_size=128, validation_split=0.1)
+
+# Evaluate the model
+score = text2text.evaluate(X_test_onehot, y_test_onehot, batch_size=128)
+print('Test loss:', score[0])
+print('Test accuracy:', score[1])
