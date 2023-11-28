@@ -141,21 +141,22 @@ def display_sample(n):
 for _ in range(10):
     display_sample(np.random.randint(0, 10000, 1)[0])
 
+
 # One-hot encoding/decoding the text queries/answers so that they can be processed using RNNs
 # You should use these functions to convert your strings and read out the output of your networks
 
 def encode_labels(labels, max_len=3):
-  n = len(labels)
-  length = len(labels[0])
-  char_map = dict(zip(unique_characters, range(len(unique_characters))))
-  one_hot = np.zeros([n, length, len(unique_characters)])
-  for i, label in enumerate(labels):
-      m = np.zeros([length, len(unique_characters)])
-      for j, char in enumerate(label):
-          m[j, char_map[char]] = 1
-      one_hot[i] = m
+    n = len(labels)
+    length = len(labels[0])
+    char_map = dict(zip(unique_characters, range(len(unique_characters))))
+    one_hot = np.zeros([n, length, len(unique_characters)])
+    for i, label in enumerate(labels):
+        m = np.zeros([length, len(unique_characters)])
+        for j, char in enumerate(label):
+            m[j, char_map[char]] = 1
+        one_hot[i] = m
 
-  return one_hot
+    return one_hot
 
 
 def decode_labels(labels):
@@ -163,6 +164,7 @@ def decode_labels(labels):
     predicted = ''.join([unique_characters[i] for i in pred])
 
     return predicted
+
 
 X_text_onehot = encode_labels(X_text)
 y_text_onehot = encode_labels(y_text)
