@@ -1,8 +1,11 @@
+import numpy as np
+from matplotlib import pyplot as plt
 import required
 import tensorflow as tf
 from keras.layers import Dense, RNN, LSTM, Flatten, TimeDistributed, LSTMCell
 from keras.layers import RepeatVector, Conv2D, SimpleRNN, GRU, Reshape, ConvLSTM2D, Conv2DTranspose
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import confusion_matrix
 
 
 def build_text2text_model():
@@ -51,3 +54,24 @@ text2text.fit(X_train_onehot, y_train_onehot, epochs=50, batch_size=128, validat
 score = text2text.evaluate(X_test_onehot, y_test_onehot, batch_size=128)
 print('Test loss:', score[0])
 print('Test accuracy:', score[1])
+
+# Confusion matrix
+y_pred = text2text.predict(X_test_onehot)
+y_pred = np.argmax(y_pred, axis=2)
+y_test = np.argmax(y_test_onehot, axis=2)
+
+# Flatten the arrays
+y_pred = y_pred.flatten()
+y_test = y_test.flatten()
+
+cm = confusion_matrix(y_test, y_pred) / len(y_test)
+
+# Plot confusion matrix
+plt.figure(figsize=(10, 10))
+plt.imshow(cm, cmap='Blues')
+plt.xlabel('Predicted')
+plt.ylabel('True')
+plt.colorbar(format='%d%%')
+# Add labels in each cell
+
+plt.show()
