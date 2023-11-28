@@ -2,10 +2,6 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 import cv2
 import numpy as np
-import random
-from sklearn.model_selection import train_test_split
-from keras.layers import Dense, RNN, LSTM, Flatten, TimeDistributed, LSTMCell
-from keras.layers import RepeatVector, Conv2D, SimpleRNN, GRU, Reshape, ConvLSTM2D, Conv2DTranspose
 from scipy.ndimage import rotate
 
 

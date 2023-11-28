@@ -1,3 +1,8 @@
+import numpy as np
+from matplotlib import pyplot as plt
+import tensorflow as tf
+import required
+
 # Illustrate the generated query/answer pairs
 
 unique_characters = '0123456789* '  # All unique characters that are used in the queries (13 in total: digits
@@ -11,7 +16,7 @@ max_answer_length = 5  # Maximum length of the answer string (the longest result
 
 # Create the data (might take around a minute)
 (MNIST_data, MNIST_labels), _ = tf.keras.datasets.mnist.load_data()
-X_text, X_img, y_text, y_img = create_data(highest_integer, operands=['*'])
+X_text, X_img, y_text, y_img = required.create_data(highest_integer, operands=['*'])
 print(X_text.shape, X_img.shape, y_text.shape, y_img.shape)
 
 
