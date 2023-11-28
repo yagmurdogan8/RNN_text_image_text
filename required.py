@@ -46,6 +46,7 @@ def show_generated(images, n=5):
 show_generated(generate_images())
 show_generated(generate_images(sign='+'))
 
+
 def create_data(highest_integer, num_addends=2, operands=['+', '-']):
     """
     Creates the following data for all pairs of integers up to [1:highest integer][+/-][1:highest_integer]:
@@ -59,7 +60,7 @@ def create_data(highest_integer, num_addends=2, operands=['+', '-']):
     Images for digits are picked randomly from the whole MNIST dataset.
     """
 
-    num_indices = [np.where(MNIST_labels==x) for x in range(10)]
+    num_indices = [np.where(MNIST_labels == x) for x in range(10)]
     num_data = [MNIST_data[inds] for inds in num_indices]
     image_mapping = dict(zip(unique_characters[:10], num_data))
     image_mapping['-'] = generate_images()
@@ -69,9 +70,9 @@ def create_data(highest_integer, num_addends=2, operands=['+', '-']):
 
     X_text, X_img, y_text, y_img = [], [], [], []
 
-    for i in range(highest_integer + 1):      # First addend
+    for i in range(highest_integer + 1):  # First addend
         for j in range(highest_integer + 1):  # Second addend
-            for sign in operands: # Create all possible combinations of operands
+            for sign in operands:  # Create all possible combinations of operands
                 query_string = to_padded_chars(str(i) + sign + str(j), max_len=max_query_length, pad_right=True)
                 query_image = []
                 for n, char in enumerate(query_string):
@@ -92,7 +93,8 @@ def create_data(highest_integer, num_addends=2, operands=['+', '-']):
                 y_text.append(result_string)
                 y_img.append(np.stack(result_image))
 
-    return np.stack(X_text), np.stack(X_img)/255., np.stack(y_text), np.stack(y_img)/255.
+    return np.stack(X_text), np.stack(X_img) / 255., np.stack(y_text), np.stack(y_img) / 255.
+
 
 def to_padded_chars(integer, max_len=3, pad_right=False):
     """
