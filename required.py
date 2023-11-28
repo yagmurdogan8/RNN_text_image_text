@@ -121,7 +121,7 @@ X_text, X_img, y_text, y_img = create_data(highest_integer)
 print(X_text.shape, X_img.shape, y_text.shape, y_img.shape)
 
 
-## Display the samples that were created
+# Display the samples that were created
 def display_sample(n):
     labels = ['X_img:', 'y_img:']
     for i, data in enumerate([X_img, y_img]):
