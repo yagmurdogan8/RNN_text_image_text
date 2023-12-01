@@ -1,7 +1,8 @@
-import required
 import tensorflow as tf
-from keras.layers import Dense, RNN, LSTM, Flatten, TimeDistributed, LSTMCell
-from keras.layers import RepeatVector, Conv2D, SimpleRNN, GRU, Reshape, ConvLSTM2D, Conv2DTranspose
+from keras.layers import Dense, LSTM, TimeDistributed
+from keras.layers import RepeatVector, Conv2D, Reshape, Conv2DTranspose
+
+import required
 
 
 def build_text2image_model(use_deconv=True, filters=512):
