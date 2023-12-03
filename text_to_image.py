@@ -39,6 +39,7 @@ X_train_onehot, X_test_onehot, y_train_onehot, y_test_onehot = train_test_split(
 
 text2text = build_text2image_model()
 
+
 # Train the model
 text2text.fit(X_train_onehot, y_train_onehot, epochs=50, batch_size=128, validation_split=0.1)
 
@@ -56,14 +57,14 @@ y_test = np.argmax(y_test_onehot, axis=2)
 y_pred = y_pred.flatten()
 y_test = y_test.flatten()
 
-cm = confusion_matrix(y_test, y_pred) / len(y_test)
-
-# Plot confusion matrix
-plt.figure(figsize=(10, 10))
-plt.imshow(cm, cmap='Blues')
-plt.xlabel('Predicted')
-plt.ylabel('True')
-plt.colorbar(format='%d%%')
-# Add labels in each cell
-
-plt.show()
+# cm = confusion_matrix(y_test, y_pred) / len(y_test)
+#
+# # Plot confusion matrix
+# plt.figure(figsize=(10, 10))
+# plt.imshow(cm, cmap='Blues')
+# plt.xlabel('Predicted')
+# plt.ylabel('True')
+# plt.colorbar(format='%d%%')
+# # Add labels in each cell
+#
+# plt.show()
