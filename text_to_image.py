@@ -22,7 +22,7 @@ def build_text2image_model(use_deconv=True, filters=512):
         text2image.add(
             TimeDistributed(Conv2DTranspose(filters, (3, 3), strides=(2, 2), padding="same", activation="relu")))
         text2image.add(TimeDistributed(BatchNormalization()))
-        text2image.add(TimeDistributed(Conv2D(1, (5, 5), padding="same", activation="sigmoid")))
+        text2image.add(TimeDistributed(Conv2D(13, (5, 5), padding="same", activation="sigmoid")))
 
     text2image.compile(loss='binary_crossentropy', optimizer='adam')  # mse loss increase the accuracy
     text2image.summary()
@@ -35,7 +35,7 @@ X_train_onehot, X_test_onehot, y_train_onehot, y_test_onehot = train_test_split(
                                                                                 test_size=0.1, random_state=42)
 
 text2text = build_text2image_model()
-
+print("ytest", y_test_onehot.shape, "ytrain", y_train_onehot.shape)
 
 # Train the model
 text2text.fit(X_train_onehot, y_train_onehot, epochs=50, batch_size=128, validation_split=0.1)
