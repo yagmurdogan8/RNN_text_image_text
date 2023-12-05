@@ -3,10 +3,7 @@ import tensorflow as tf
 from keras.layers import Dense, LSTM, TimeDistributed
 from keras.layers import RepeatVector, Conv2D, Reshape, Conv2DTranspose
 from keras.src.layers import BatchNormalization
-from matplotlib import pyplot as plt
-from sklearn.metrics import confusion_matrix
 from sklearn.model_selection import train_test_split
-
 import required
 
 
@@ -57,14 +54,3 @@ y_test = np.argmax(y_test_onehot, axis=2)
 y_pred = y_pred.flatten()
 y_test = y_test.flatten()
 
-# cm = confusion_matrix(y_test, y_pred) / len(y_test)
-#
-# # Plot confusion matrix
-# plt.figure(figsize=(10, 10))
-# plt.imshow(cm, cmap='Blues')
-# plt.xlabel('Predicted')
-# plt.ylabel('True')
-# plt.colorbar(format='%d%%')
-# # Add labels in each cell
-#
-# plt.show()
