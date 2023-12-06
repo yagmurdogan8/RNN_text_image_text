@@ -10,46 +10,48 @@ from sklearn.model_selection import train_test_split
 import required
 
 
-def build_text2image_model(use_deconv=True, filters=512):
-    text2image = keras.Sequential()
-    text2image.add(LSTM(256, input_shape=(None, len(required.unique_characters))))
-    text2image.add(RepeatVector(required.max_answer_length))
-
-    if use_deconv:
-        text2image.add(TimeDistributed(Dense(7 * 7 * 128, activation="softmax")))
-        text2image.add(TimeDistributed(Reshape((7, 7, 128))))
-        text2image.add(TimeDistributed(BatchNormalization()))
-        text2image.add(
-            TimeDistributed(Conv2DTranspose(filters, (3, 3), strides=(2, 2), padding="same", activation="relu")))
-        text2image.add(TimeDistributed(BatchNormalization()))
-        text2image.add(
-            TimeDistributed(Conv2DTranspose(filters, (3, 3), strides=(2, 2), padding="same", activation="relu")))
-        text2image.add(TimeDistributed(BatchNormalization()))
-        text2image.add(TimeDistributed(Conv2D(1, (5, 5), padding="same", activation="sigmoid")))
-
-    text2image.compile(loss='binary_crossentropy', optimizer='adam')
-    text2image.summary()
-
-    return text2image
-
-
-X_train_onehot, X_test_onehot, y_train_onehot, y_test_onehot = train_test_split(required.X_text_onehot,
-                                                                                required.y_img, test_size=0.2)
-# from tensorflow.python.client import device_lib
-# print(device_lib.list_local_devices())
-# print(tf.config.list_physical_devices('GPU'))
-# print("GPU kullanılabilir mi:", tf.test.is_gpu_available())
-
-text2image_model = build_text2image_model()
-
-# Train the model
-text2image_model.fit(X_train_onehot, y_train_onehot, epochs=10, batch_size=32, validation_split=0.2)
-
-# Evaluate the model
-score = text2image_model.evaluate(X_test_onehot, y_test_onehot, batch_size=32)
-print('Test loss:', score[0])
-print('Test accuracy:', score[1])
-
+#
+#
+# def build_text2image_model(use_deconv=True, filters=512):
+#     text2image = keras.Sequential()
+#     text2image.add(LSTM(256, input_shape=(None, len(required.unique_characters))))
+#     text2image.add(RepeatVector(required.max_answer_length))
+#
+#     if use_deconv:
+#         text2image.add(TimeDistributed(Dense(7 * 7 * 128, activation="softmax")))
+#         text2image.add(TimeDistributed(Reshape((7, 7, 128))))
+#         text2image.add(TimeDistributed(BatchNormalization()))
+#         text2image.add(
+#             TimeDistributed(Conv2DTranspose(filters, (3, 3), strides=(2, 2), padding="same", activation="relu")))
+#         text2image.add(TimeDistributed(BatchNormalization()))
+#         text2image.add(
+#             TimeDistributed(Conv2DTranspose(filters, (3, 3), strides=(2, 2), padding="same", activation="relu")))
+#         text2image.add(TimeDistributed(BatchNormalization()))
+#         text2image.add(TimeDistributed(Conv2D(1, (5, 5), padding="same", activation="sigmoid")))
+#
+#     text2image.compile(loss='binary_crossentropy', optimizer='adam')
+#     text2image.summary()
+#
+#     return text2image
+#
+#
+# X_train_onehot, X_test_onehot, y_train_onehot, y_test_onehot = train_test_split(required.X_text_onehot,
+#                                                                                 required.y_img, test_size=0.2)
+# # from tensorflow.python.client import device_lib
+# # print(device_lib.list_local_devices())
+# # print(tf.config.list_physical_devices('GPU'))
+# # print("GPU kullanılabilir mi:", tf.test.is_gpu_available())
+#
+# text2image_model = build_text2image_model()
+#
+# # Train the model
+# text2image_model.fit(X_train_onehot, y_train_onehot, epochs=10, batch_size=32, validation_split=0.2)
+#
+# # Evaluate the model
+# score = text2image_model.evaluate(X_test_onehot, y_test_onehot, batch_size=32)
+# print('Test loss:', score[0])
+# print('Test accuracy:', score[1])
+#
 
 # import numpy as np
 # from keras.models import Sequential
@@ -122,17 +124,17 @@ print('Test accuracy:', score[1])
 # model.fit(X_text, y_images, epochs=10, batch_size=32, validation_split=0.2)
 
 def build_text2image_model(use_deconv=True, filters=256):
-    text2image = tf.keras.Sequential()
+    text2image = keras.Sequential()
     # text2image.add(Embedding(len(unique_characters), 128, input_length=5))
     text2image.add(LSTM(256, input_shape=(None, len(required.unique_characters))))
     # text2image.add(Dense(256))
     text2image.add(RepeatVector(required.max_answer_length))
     text2image.add(LSTM(256, return_sequences=True))
     text2image.add(TimeDistributed(Dense(len(required.unique_characters), activation='softmax')))
-    # text2image.add(TimeDistributed(tf.keras.layers.Lambda(lambda x: tf.one_hot(tf.argmax(x, axis=1), depth=tf.shape(x)[-1]))))
-    # text2image.add(TimeDistributed(Dense(len(unique_characters), activation="softmax")))
+    # text2image.add(TimeDistributed(tf.keras.layers.Lambda(lambda x: tf.one_hot(tf.argmax(x, axis=1),
+    # depth=tf.shape(x)[-1])))) text2image.add(TimeDistributed(Dense(len(unique_characters), activation="softmax")))
 
-    if (use_deconv):
+    if use_deconv:
         text2image.add(TimeDistributed(Dense(4 * 4 * 64, activation="softmax")))
         text2image.add(TimeDistributed(Reshape((4, 4, 64))))
         text2image.add(TimeDistributed(BatchNormalization()))
@@ -149,7 +151,7 @@ def build_text2image_model(use_deconv=True, filters=256):
             TimeDistributed(Conv2DTranspose(filters, (2, 2), strides=(2, 2), padding="same", activation="relu")))
         text2image.add(TimeDistributed(BatchNormalization()))
         text2image.add(TimeDistributed(Conv2D(1, (5, 5), padding="same", activation="sigmoid")))
-        text2image.add(TimeDistributed(tf.keras.layers.Resizing(28, 28)))
+        text2image.add(TimeDistributed(keras.layers.Resizing(28, 28)))
 
     text2image.compile(loss='binary_crossentropy', optimizer='adam')  # mse loss increase the accuracy
     text2image.summary()
@@ -168,7 +170,7 @@ def grid_plot(images, epoch='', name='', n=3, save=False, scale=False):
     fig = plt.gcf()
     fig.suptitle(name + '  ' + str(epoch), fontsize=14)
     if save:
-        filename = 'results/generated_plot_e%03d_f.png' % (epoch + 1)
+        filename = 'results/generated_plot_e%03d_f.png'
         plt.savefig(filename)
         plt.close()
         plt.show()
