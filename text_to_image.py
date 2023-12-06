@@ -222,7 +222,7 @@ def build_text2image_model(use_deconv=True, filters=256):
         text2image.add(TimeDistributed(Conv2D(1, (5, 5), padding="same", activation="sigmoid")))
         text2image.add(TimeDistributed(keras.layers.Resizing(28, 28)))
 
-    text2image.compile(loss='binary_crossentropy', optimizer='adam')  # mse loss increase the accuracy
+    text2image.compile(loss='mean_squared_error', optimizer='adam')
     text2image.summary()
 
     return text2image
