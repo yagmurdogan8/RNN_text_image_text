@@ -227,6 +227,7 @@ def build_text2image_model(use_deconv=True, filters=256):
 
     return text2image
 
+
 # Function to plot images
 def grid_plot(images, epoch='', name='', n=3, save=False, scale=False):
     if scale:
@@ -244,6 +245,7 @@ def grid_plot(images, epoch='', name='', n=3, save=False, scale=False):
     else:
         plt.show()
 
+
 # Function to train and visualize the text-to-image model
 def graph_accuracy_text2image(splits, epochs):
     for s in splits:
@@ -257,6 +259,7 @@ def graph_accuracy_text2image(splits, epochs):
             reconstructed = model.predict(samples)
             for i in range(len(reconstructed)):
                 grid_plot(reconstructed[i], epoch=epoch, name='Reconstructed - ' + str(i), n=3, save=False)
+
 
 # Example usage
 splits_try = [0.7]
