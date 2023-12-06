@@ -1,6 +1,6 @@
 import keras
 import numpy as np
-import tensorflow
+import tensorflow as tf
 from keras.layers import Dense, LSTM, TimeDistributed
 from keras.layers import RepeatVector, Conv2D, Reshape, Conv2DTranspose
 from keras.src.layers import BatchNormalization
@@ -35,8 +35,8 @@ X_train_onehot, X_test_onehot, y_train_onehot, y_test_onehot = train_test_split(
                                                                                 required.y_img, test_size=0.1)
 from tensorflow.python.client import device_lib
 print(device_lib.list_local_devices())
-print(tensorflow.config.list_physical_devices('GPU'))
-print("GPU kullanılabilir mi:", tensorflow.test.is_gpu_available())
+print(tf.config.list_physical_devices('GPU'))
+print("GPU kullanılabilir mi:", tf.test.is_gpu_available())
 
 #text2image_model = build_text2image_model()
 
