@@ -1,8 +1,6 @@
 import keras
 import numpy as np
 from matplotlib import pyplot as plt
-
-import tensorflow as tf
 from keras.layers import Dense, LSTM, TimeDistributed
 from keras.layers import RepeatVector, Conv2D, Reshape, Conv2DTranspose
 from keras.src.layers import BatchNormalization
