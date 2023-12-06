@@ -80,10 +80,10 @@ text2text = build_text2image_model()
 print("ytest", y_test_onehot.shape, "ytrain", y_train_onehot.shape)
 
 # Train the model
-text2text.fit(X_train_onehot, y_train_onehot, epochs=50, batch_size=128, validation_split=0.1)
+text2text.fit(X_train_onehot, y_train_onehot, epochs=5, batch_size=16, validation_split=0.1)
 
 # Evaluate the model
-score = text2text.evaluate(X_test_onehot, y_test_onehot, batch_size=128)
+score = text2text.evaluate(X_test_onehot, y_test_onehot, batch_size=16)
 print('Test loss:', score[0])
 print('Test accuracy:', score[1])
 
