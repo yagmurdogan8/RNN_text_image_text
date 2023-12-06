@@ -33,10 +33,10 @@ def build_text2image_model(use_deconv=True, filters=512):
 
 X_train_onehot, X_test_onehot, y_train_onehot, y_test_onehot = train_test_split(required.X_text_onehot,
                                                                                 required.y_img, test_size=0.1)
-from tensorflow.python.client import device_lib
-print(device_lib.list_local_devices())
-print(tf.config.list_physical_devices('GPU'))
-print("GPU kullanılabilir mi:", tf.test.is_gpu_available())
+# from tensorflow.python.client import device_lib
+# print(device_lib.list_local_devices())
+# print(tf.config.list_physical_devices('GPU'))
+# print("GPU kullanılabilir mi:", tf.test.is_gpu_available())
 
 #text2image_model = build_text2image_model()
 
