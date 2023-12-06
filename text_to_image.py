@@ -1,5 +1,7 @@
 import keras
 import numpy as np
+from matplotlib import pyplot as plt
+
 import tensorflow as tf
 from keras.layers import Dense, LSTM, TimeDistributed
 from keras.layers import RepeatVector, Conv2D, Reshape, Conv2DTranspose
@@ -47,6 +49,7 @@ text2image_model.fit(X_train_onehot, y_train_onehot, epochs=10, batch_size=32, v
 score = text2image_model.evaluate(X_test_onehot, y_test_onehot, batch_size=32)
 print('Test loss:', score[0])
 print('Test accuracy:', score[1])
+
 
 # import numpy as np
 # from keras.models import Sequential
@@ -117,3 +120,80 @@ print('Test accuracy:', score[1])
 #
 # # Train the model
 # model.fit(X_text, y_images, epochs=10, batch_size=32, validation_split=0.2)
+
+def build_text2image_model(use_deconv=True, filters=256):
+    text2image = tf.keras.Sequential()
+    # text2image.add(Embedding(len(unique_characters), 128, input_length=5))
+    text2image.add(LSTM(256, input_shape=(None, len(required.unique_characters))))
+    # text2image.add(Dense(256))
+    text2image.add(RepeatVector(required.max_answer_length))
+    text2image.add(LSTM(256, return_sequences=True))
+    text2image.add(TimeDistributed(Dense(len(required.unique_characters), activation='softmax')))
+    # text2image.add(TimeDistributed(tf.keras.layers.Lambda(lambda x: tf.one_hot(tf.argmax(x, axis=1), depth=tf.shape(x)[-1]))))
+    # text2image.add(TimeDistributed(Dense(len(unique_characters), activation="softmax")))
+
+    if (use_deconv):
+        text2image.add(TimeDistributed(Dense(4 * 4 * 64, activation="softmax")))
+        text2image.add(TimeDistributed(Reshape((4, 4, 64))))
+        text2image.add(TimeDistributed(BatchNormalization()))
+        # 4x4 to 8x8
+        text2image.add(
+            TimeDistributed(Conv2DTranspose(filters, (5, 5), strides=(2, 2), padding="same", activation="relu")))
+        text2image.add(TimeDistributed(BatchNormalization()))
+        # 8x8 to 16x16
+        text2image.add(
+            TimeDistributed(Conv2DTranspose(filters, (3, 3), strides=(2, 2), padding="same", activation="relu")))
+        text2image.add(TimeDistributed(BatchNormalization()))
+        # 16x16 to 32x32
+        text2image.add(
+            TimeDistributed(Conv2DTranspose(filters, (2, 2), strides=(2, 2), padding="same", activation="relu")))
+        text2image.add(TimeDistributed(BatchNormalization()))
+        text2image.add(TimeDistributed(Conv2D(1, (5, 5), padding="same", activation="sigmoid")))
+        text2image.add(TimeDistributed(tf.keras.layers.Resizing(28, 28)))
+
+    text2image.compile(loss='binary_crossentropy', optimizer='adam')  # mse loss increase the accuracy
+    text2image.summary()
+
+    return text2image
+
+
+# We will use this function to display the output of our models throughout this notebook
+def grid_plot(images, epoch='', name='', n=3, save=False, scale=False):
+    if scale:
+        images = (images + 1) / 2.0
+    for index in range(n):
+        plt.subplot(n, n, 1 + index)
+        plt.axis('off')
+        plt.imshow(images[index])
+    fig = plt.gcf()
+    fig.suptitle(name + '  ' + str(epoch), fontsize=14)
+    if save:
+        filename = 'results/generated_plot_e%03d_f.png' % (epoch + 1)
+        plt.savefig(filename)
+        plt.close()
+        plt.show()
+
+
+def graph_accuracy_text2image(splits, epochs):
+    for s in splits:
+        X_train, X_test, y_train, y_test = train_test_split(required.X_text_onehot,
+                                                            required.y_img, train_size=s)
+        model = build_text2image_model()
+        # log_dir = "logs/A2/text2text/split_" + str(s)
+        indices = np.random.randint(0, len(X_train), 5)
+        samples = required.X_text_onehot[indices]
+        print(indices)
+        for epochs in range(epochs):
+            model.fit(x=X_train, y=y_train, epochs=1, batch_size=64)
+            reconstructed = model.predict(samples)
+            for i in range(len(reconstructed)):
+                grid_plot(reconstructed[i], 1, name='Reconstructed - ' + str(i)
+                                                    + ' - ' + required.decode_labels(samples[i]), n=3, save=False)
+
+
+# All splits to test the accuracy for
+splits_try = [0.7]
+splits = [0.01, 0.025, 0.05, 0.075, 0.1, 0.2, 0.3, 0.4, 0.5]
+# Number of epochs
+epochs = 200
+# graph_accuracy_text2image(splits_try, epochs)
