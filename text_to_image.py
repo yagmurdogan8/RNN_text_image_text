@@ -32,7 +32,7 @@ def build_text2image_model(use_deconv=True, filters=512):
 
 
 X_train_onehot, X_test_onehot, y_train_onehot, y_test_onehot = train_test_split(required.X_text_onehot,
-                                                                                required.y_img, test_size=0.1)
+                                                                                required.y_img, test_size=0.2)
 # from tensorflow.python.client import device_lib
 # print(device_lib.list_local_devices())
 # print(tf.config.list_physical_devices('GPU'))
@@ -41,10 +41,10 @@ X_train_onehot, X_test_onehot, y_train_onehot, y_test_onehot = train_test_split(
 text2image_model = build_text2image_model()
 
 # Train the model
-text2image_model.fit(X_train_onehot, y_train_onehot, epochs=50, batch_size=128, validation_split=0.1)
+text2image_model.fit(X_train_onehot, y_train_onehot, epochs=10, batch_size=32, validation_split=0.2)
 
 # Evaluate the model
-score = text2image_model.evaluate(X_test_onehot, y_test_onehot, batch_size=128)
+score = text2image_model.evaluate(X_test_onehot, y_test_onehot, batch_size=32)
 print('Test loss:', score[0])
 print('Test accuracy:', score[1])
 
