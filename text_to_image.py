@@ -260,6 +260,7 @@ def graph_accuracy_text2image(splits, epochs):
             for i in range(len(reconstructed)):
                 grid_plot(reconstructed[i], epoch=epoch, name='Reconstructed - ' + str(i), n=3, save=False)
 
+
 # Example usage
 splits_try = [0.7]
 splits = [0.01, 0.025, 0.05, 0.075, 0.1, 0.2, 0.3, 0.4, 0.5]
